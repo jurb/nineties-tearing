@@ -12,29 +12,29 @@
 
 	let drawing = false;
 	let currentCursorImg = nokiaCursor;
-	let currentCursorImgUrl = nokiaLarge;
+	let currentImg = nokiaLarge;
 
-	function startDrawing(event) {
+	function startDrawing(event: PointerEvent) {
 		event.preventDefault();
 		drawing = true;
 		addPoint(event);
 	}
 
-	function draw(event) {
+	function draw(event: PointerEvent) {
 		if (drawing) {
 			event.preventDefault();
 			addPoint(event);
 		}
 	}
 
-	function stopDrawing(event) {
+	function stopDrawing(event: PointerEvent) {
 		event.preventDefault();
 		paths = [...paths, points];
 		points = [];
 		drawing = false;
 	}
 
-	function addPoint(event) {
+	function addPoint(event: PointerEvent) {
 		const newPoint = { x: event.clientX, y: event.clientY };
 		points = [...points, newPoint];
 	}
@@ -48,13 +48,13 @@
 	<button
 		on:click={() => {
 			currentCursorImg = nokiaCursor;
-			currentCursorImgUrl = nokiaLarge;
+			currentImg = nokiaLarge;
 		}}>nokia</button
 	>
 	<button
 		on:click={() => {
 			currentCursorImg = ipodCursor;
-			currentCursorImgUrl = ipodLarge;
+			currentImg = ipodLarge;
 		}}>ipod</button
 	>
 </div>
@@ -88,12 +88,12 @@
 		{#each paths as savedPath}
 			{#each savedPath as point, index (point.x + '-' + point.y + '-' + index)}
 				<!-- <text x={point.x} y={point.y} font-size="20">{emoji}</text> -->
-				<image x={point.x} y={point.y} width="89" height="128" href={currentCursorImgUrl}></image>
+				<image x={point.x - 20} y={point.y} width="128" height="128" href={currentImg}></image>
 			{/each}
 		{/each}
 		{#each points as point, index (point.x + '-' + point.y + '-' + index)}
 			<!-- <text x={point.x} y={point.y} font-size="20">{emoji}</text> -->
-			<image x={point.x} y={point.y} width="89" height="128" href={currentCursorImgUrl}></image>
+			<image x={point.x - 20} y={point.y} width="128" height="128" href={currentImg}></image>
 		{/each}
 	</svg>
 </div>
