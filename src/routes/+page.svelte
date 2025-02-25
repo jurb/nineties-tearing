@@ -13,6 +13,9 @@
 	let drawing = false;
 	let currentCursorImg = nokiaCursor;
 	let currentImg = nokiaLarge;
+	
+	// Add CRT effect toggle
+	let crtEffect = true;
 
 	function startDrawing(event: PointerEvent) {
 		event.preventDefault();
@@ -57,8 +60,16 @@
 			currentImg = ipodLarge;
 		}}>ipod</button
 	>
+	<button on:click={() => (crtEffect = !crtEffect)}>
+		{crtEffect ? 'CRT: ON' : 'CRT: OFF'}
+	</button>
 </div>
 <div class="svg-wrapper">
+	<!-- CRT scan lines overlay -->
+	{#if crtEffect}
+		<div class="crt-overlay"></div>
+	{/if}
+	
 	<svg
 		width="100%"
 		height="100%"
@@ -107,11 +118,13 @@
 	.svg-wrapper {
 		height: calc(100dvh);
 		width: 100dvw;
+		position: relative;
 	}
 
 	.menu-wrapper {
 		position: absolute;
 		margin: 0.5rem;
+		z-index: 10;
 	}
 
 	button {
@@ -122,9 +135,35 @@
 		margin: 0.25rem;
 	}
 
+	/* CRT scan lines effect */
+	.crt-overlay {
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(
+			rgba(18, 16, 16, 0) 50%, 
+			rgba(0, 0, 0, 0.25) 50%
+		);
+		background-size: 100% 2px;
+		z-index: 9;
+		pointer-events: none; /* Allows clicks to pass through to the SVG */
+		opacity: 0.8;
+		animation: flicker 0.15s infinite;
+	}
+
+	/* Add subtle CRT flicker effect */
+	@keyframes flicker {
+		0% { opacity: 0.8; }
+		50% { opacity: 0.75; }
+		100% { opacity: 0.8; }
+	}
+
 	:global(body) {
 		margin: 0;
 		padding: 0;
 		overflow: hidden;
+		background-color: #fff; /* Dark background for CRT effect */
 	}
 </style>
